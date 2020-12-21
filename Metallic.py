@@ -7,5 +7,16 @@ class Metallic():
         self.w3 = w3
 
     def addUsername(self, username: str):
-        tx_hash = self.contract.functions.addUsername(stringToBytes(username, 32)).transact()
+        tx_hash = self.contract.functions.addUsername(username).transact()
         tx_receipt = self.w3.eth.waitForTransactionReceipt(tx_hash)
+        return tx_receipt
+
+    def getAddressFromUsername(self, username):
+        return self.contract.functions.getAddressFromUsername(username).call()
+
+    def getUsernameFromAddress(self, address):
+        return self.contract.functions.getUsernameFromAddress(address).call()
+
+    def getCurrentUsersUsername(self):
+        return self.contract.functions.getCurrentUsersUsername().call()
+
