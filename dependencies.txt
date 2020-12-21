@@ -1,0 +1,2 @@
+pip3 install py-solc-x
+pip3 install -U web3[tester]
