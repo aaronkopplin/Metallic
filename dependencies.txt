@@ -2,3 +2,4 @@ pip3 install py-solc-x
 pip3 install -U web3[tester]
 pip3 install flask-wtf
 pip3 install email_validator
+pip3 install flask-sqlalchemy

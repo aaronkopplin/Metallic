@@ -6,17 +6,17 @@ class Metallic():
         self.contract = compile_contract(filePath, fileName, contractName, w3)
         self.w3 = w3
 
-    def addUsername(self, username: str):
-        tx_hash = self.contract.functions.addUsername(username).transact()
+    def addAccount(self, username: str, public_address: str, currency: str):
+        tx_hash = self.contract.functions.addAccount(username, public_address, currency).transact()
         tx_receipt = self.w3.eth.waitForTransactionReceipt(tx_hash)
         return tx_receipt
 
-    def getAddressFromUsername(self, username):
-        return self.contract.functions.getAddressFromUsername(username).call()
+    def getAddress(self, username):
+        return self.contract.functions.getAddress(username).call()
 
-    def getUsernameFromAddress(self, address):
-        return self.contract.functions.getUsernameFromAddress(address).call()
-
-    def getCurrentUsersUsername(self):
-        return self.contract.functions.getCurrentUsersUsername().call()
+    # def getUsernameFromAddress(self, address):
+    #     return self.contract.functions.getUsernameFromAddress(address).call()
+    #
+    # def getCurrentUsersUsername(self):
+    #     return self.contract.functions.getCurrentUsersUsername().call()
 

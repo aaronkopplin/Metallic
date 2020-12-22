@@ -4,8 +4,13 @@ pragma solidity >=0.7.0 <0.8.0;
 
 contract UsernameDatabase {
 
-    mapping (address => string) addressToUsername;
-    mapping (string => address) usernameToAddress;
+    struct UserAccount {
+        string username;
+        string public_address;
+        string currency;
+    }
+
+    mapping (string => UserAccount) private accounts;
 
     constructor() public {
 
@@ -15,28 +20,24 @@ contract UsernameDatabase {
     // the derived classes addUsername must be public. If they share the
     // same name, then it is an override, but overrides cannot have
     // different visibility.
-    function _addUsername(string memory username) internal virtual {
+    function _addAccount(string memory username, string memory public_address, string memory currency) internal virtual {
+        require (bytes(username).length != 0, "Username cannot be empty");
+        require (bytes(public_address).length != 0, "Public Address cannot be empty");
         require (!usernameExists(username), "Username already exists.");
 
         // if the username is unused, add it to the database
-        usernameToAddress[username] = msg.sender;
-        addressToUsername[msg.sender] = username;
+        UserAccount memory newUser = UserAccount(username, public_address, currency);
+        accounts[username] = newUser;
     }
 
     function usernameExists(string memory username) public view returns (bool) {
-        return usernameToAddress[username] != address(0);
+        UserAccount memory user = accounts[username];
+        return keccak256(bytes(user.username)) != keccak256("") && keccak256(bytes(user.public_address)) != keccak256("");
     }
 
-    function getAddressFromUsername(string memory username) public view returns (address) {
-        return usernameToAddress[username];
-    }
-
-    function getUsernameFromAddress(address currAddress) public view returns (string memory) {
-        return addressToUsername[currAddress];
-    }
-
-    function getCurrentUsersUsername() public view returns (string memory) {
-        return addressToUsername[msg.sender];
+    function getAddress(string memory username) public view returns (string memory) {
+        UserAccount memory user = accounts[username];
+        return user.public_address;
     }
 }
 
@@ -51,28 +52,54 @@ contract Metallic is UsernameDatabase{
         return string(result);
     }
 
-    function isValidChar(bytes1 c) private pure returns (bool) {
-        //utf-8
-        return ((c >= 0x30 && c <= 0x39)     // 0-9
-                || (c >= 0x41 && c <= 0x5A)  // capital letters
-                || (c >= 0x61 && c <= 0x7A)  // lowercase letters
-                || (c == 0x5F));              // underscore
+    function isDigit(bytes1 char) private pure returns (bool){
+        return char >= 0x30 && char <= 0x39;
+    }
+
+    function isLetter(bytes1 char) private pure returns (bool) {
+        return (char >= 0x41 && char <= 0x5A) || (char >= 0x61 && char <= 0x7A);
+    }
+
+    function isUnderscore(bytes1 char) private pure returns (bool){
+        return char == 0x5F;
     }
 
     function helloWorld() public pure returns (string memory) {
         return "Hello World";
     }
 
-    //add a username for an address
-    function addUsername(string memory username) public {
+    function isValidUsername(string memory username) private returns (bool){
         require(bytes(username).length <= 32, "Usernames must be 32 characters or less.");
         require(bytes(username).length >= 1, "Usernames must be at least one character");
 
         for (uint i = 0; i < bytes(username).length; i++ ){
             bytes1 char = bytes(substring(username, i, i+1))[0];
-            require(isValidChar(char), "Characters must be 0-9, a-z, A-Z.");
+            if (!isDigit(char) && ! isLetter(char) && !isUnderscore(char)){
+                return false;
+            }
         }
 
-        super._addUsername(username);
+        return true;
+    }
+
+    function isValidCurrency(string memory currency) private returns (bool) {
+        require(bytes(currency).length <= 32, "Currency must be 32 characters or less.");
+        require(bytes(currency).length > 1, "Currency must be at least one character");
+
+        for (uint i = 0; i < bytes(currency).length; i++) {
+            bytes1 char = bytes(substring(currency, i, i+1))[0];
+            if (!isLetter(char)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    //add a username for an address
+    function addAccount(string memory username, string memory public_address, string memory currency) public {
+        require(isValidUsername(username), "Username invalid");
+        require(isValidCurrency(currency), "Currency invalid");
+
+        super._addAccount(username, public_address, currency);
     }
 }
