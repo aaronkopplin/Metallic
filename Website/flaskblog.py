@@ -1,5 +1,5 @@
-from flask import Flask, render_template, url_for, flash, redirect
-from forms import RegistrationForm, LoginForm
+from flask import Flask, render_template, url_for, flash, redirect, request
+import forms
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
@@ -26,6 +26,24 @@ def home():
     return render_template('home.html', posts=posts)
 
 
+@app.route("/create-account", methods=['GET', 'POST'])
+def createAccount():
+    account_form = forms.CreateAccountForm()
+
+    # set payment address
+    account_form.payment_address.text = "0x1234abcd"
+
+    # handle button presses
+    if account_form.validate_on_submit():
+        flash("Account Created.", 'success')
+        print(account_form.username.data, account_form.public_address.data)
+
+        # payment verified, reroute to home
+        return redirect(url_for('home'))
+
+    return render_template('createAccount.html', title="Create Account", account_form=account_form)
+
+
 @app.route("/about")
 def about():
     return render_template('about.html', title='About')
@@ -33,7 +51,7 @@ def about():
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
-    form = RegistrationForm()
+    form = forms.RegistrationForm()
     if form.validate_on_submit():
         flash(f'Account created for {form.username.data}!', 'success')
         return redirect(url_for('home'))
@@ -42,7 +60,7 @@ def register():
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
-    form = LoginForm()
+    form = forms.LoginForm()
     if form.validate_on_submit():
         if form.email.data == 'admin@blog.com' and form.password.data == 'password':
             flash('You have been logged in!', 'success')
