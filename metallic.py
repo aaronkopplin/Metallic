@@ -16,8 +16,8 @@ class Metallic:
     def getAddress(self, username):
         return self.contract.functions.getAddress(username).call()
 
-    # def getUsernameFromAddress(self, address):
-    #     return self.contract.functions.getUsernameFromAddress(address).call()
+    def username_exists(self, username: str):
+        return self.contract.functions.usernameExists(username).call()
     #
     # def getCurrentUsersUsername(self):
     #     return self.contract.functions.getCurrentUsersUsername().call()

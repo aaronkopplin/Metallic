@@ -43,10 +43,16 @@ def createAccount():
     if account_form.validate_on_submit():
 
         #create account
-        print(metallic.helloWorld())
+        metallic.addAccount(account_form.username.data,
+                            account_form.public_address.data,
+                            "Ethereum")
 
+        # verify the username was added
+        print(metallic.username_exists(account_form.username.data))
+        print(metallic.getAddress(account_form.username.data))
+
+        # tell the user what happened
         flash("Account Created.", 'success')
-        print(account_form.username.data, account_form.public_address.data)
 
         # payment verified, reroute to home
         return redirect(url_for('home'))
