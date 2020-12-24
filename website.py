@@ -1,24 +1,30 @@
-from flask import Flask, render_template, url_for, flash, redirect, request
+from flask import Flask, render_template, url_for, flash, redirect
 import forms
+from metallic import Metallic
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
 
 posts = [
-    {
-        'author': 'Corey Schafer',
-        'title': 'Blog Post 1',
-        'content': 'First post content',
-        'date_posted': 'April 20, 2018'
-    },
-    {
-        'author': 'Jane Doe',
-        'title': 'Blog Post 2',
-        'content': 'Second post content',
-        'date_posted': 'April 21, 2018'
-    }
-]
+                    {
+                        'author': 'Corey Schafer',
+                        'title': 'Blog Post 1',
+                        'content': 'First post content',
+                        'date_posted': 'April 20, 2018'
+                    },
+                    {
+                        'author': 'Jane Doe',
+                        'title': 'Blog Post 2',
+                        'content': 'Second post content',
+                        'date_posted': 'April 21, 2018'
+                    }
+                ]
 
+def run_website(_metallic: Metallic):
+    global metallic
+    metallic = _metallic
+    app.run(debug=True)
 
 @app.route("/")
 @app.route("/home")
@@ -35,6 +41,10 @@ def createAccount():
 
     # handle button presses
     if account_form.validate_on_submit():
+
+        #create account
+        print(metallic.helloWorld())
+
         flash("Account Created.", 'success')
         print(account_form.username.data, account_form.public_address.data)
 
@@ -68,7 +78,3 @@ def login():
         else:
             flash('Login Unsuccessful. Please check username and password', 'danger')
     return render_template('login.html', title='Login', form=form)
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
