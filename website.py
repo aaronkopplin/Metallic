@@ -1,6 +1,7 @@
 from flask import Flask, render_template, url_for, flash, redirect
 import forms
 from metallic import Metallic
+from make_payment import transfer
 
 
 app = Flask(__name__)
@@ -24,7 +25,7 @@ posts = [
 def run_website(_metallic: Metallic):
     global metallic
     metallic = _metallic
-    app.run(debug=True)
+    app.run(debug=False)
 
 
 @app.route('/search', methods=["GET","POST"])
@@ -39,11 +40,11 @@ def search():
         for account in allUsernames:
             if username in account[0]:
                 matchingAccounts.append(account)
-        print(allUsernames)
-        print(len(matchingAccounts))
-        return render_template('search.html', title="Create Account", form=form, matchingAccounts=matchingAccounts)
 
-    return render_template('search.html', title="Create Account", form=form, matchingAccounts=None)
+        # render the page again, but this time with the search results
+        return render_template('search.html', title="Search", form=form, matchingAccounts=matchingAccounts)
+
+    return render_template('search.html', title="Search", form=form, matchingAccounts=None)
 
 
 @app.route("/")
@@ -55,21 +56,31 @@ def home():
 @app.route("/create-account", methods=['GET', 'POST'])
 def createAccount():
     account_form = forms.CreateAccountForm()
-
+        
     # set payment address
-    account_form.payment_address.text = "0x1234abcd"
+    account_form.payment_address.text = metallic.getReceiveAddress()
 
     # handle button presses
     if account_form.validate_on_submit():
 
+        print("estimated gas required", metallic.estimateGasToAddAccount(account_form.username.data,
+                                                                        account_form.public_address.data,
+                                                                        account_form.currency.data))
+
+        # for testing purposes, pay for the account manually
+        # use the last address from ganache
+        transfer("0xB753e2f771BF4C1C92eE4143e8cbe2F6aE2E4024", 
+                "a751fc02ac56ad329589b24778ef57173dc1a2d58d008693f43dd5e2b97db94f",
+                metallic.getReceiveAddress(),
+                1)
+
         #create account
         metallic.addAccount(account_form.username.data,
                             account_form.public_address.data,
-                            "Ethereum")
+                            account_form.currency.data)
 
         # verify the username was added
-        print(metallic.username_exists(account_form.username.data))
-        print(metallic.getAddress(account_form.username.data))
+        print("Username Successfully added!" if  metallic.username_exists(account_form.username.data) else "Failed to add username!")
 
         # tell the user what happened
         flash("Account Created.", 'success')
@@ -77,6 +88,8 @@ def createAccount():
         # payment verified, reroute to home
         return redirect(url_for('home'))
 
+
+    # render the page
     return render_template('createAccount.html', title="Create Account", account_form=account_form)
 
 

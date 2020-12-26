@@ -11,6 +11,7 @@ class SearchForm(FlaskForm):
 class CreateAccountForm(FlaskForm):
     username = StringField("Username", validators=[DataRequired()])
     public_address = StringField("Your Public Address", validators=[DataRequired()])
+    currency = StringField("Curency", validators=[DataRequired()])
     payment_address = Label("id", "")
     create_account = SubmitField("Create Account")
 

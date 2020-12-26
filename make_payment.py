@@ -1,4 +1,5 @@
 from web3 import Web3
+import sys
 
 
 def create_ganache_w3():
@@ -6,7 +7,9 @@ def create_ganache_w3():
     return Web3(Web3.HTTPProvider(ganache))
 
 
-def transfer(from_public: str, from_private: str, to_public: str, amount: int, w3: Web3):
+def transfer(from_public: str, from_private: str, to_public: str, amount: int):
+    w3 = create_ganache_w3()
+    
     if w3.isConnected():
         nonce = w3.eth.getTransactionCount(from_public)
         tx = {
@@ -22,3 +25,4 @@ def transfer(from_public: str, from_private: str, to_public: str, amount: int, w
         print(Web3.toHex(tx_hash))
     else:
         raise Exception("Not Connected to ganache")
+

@@ -69,7 +69,7 @@ contract Metallic is UsernameDatabase{
         return "Hello World";
     }
 
-    function isValidUsername(string memory username) private returns (bool){
+    function isValidUsername(string memory username) private pure returns (bool){
         require(bytes(username).length <= 32, "Usernames must be 32 characters or less.");
         require(bytes(username).length >= 1, "Usernames must be at least one character");
 
@@ -83,7 +83,7 @@ contract Metallic is UsernameDatabase{
         return true;
     }
 
-    function isValidCurrency(string memory currency) private returns (bool) {
+    function isValidCurrency(string memory currency) private pure returns (bool) {
         require(bytes(currency).length <= 32, "Currency must be 32 characters or less.");
         require(bytes(currency).length > 1, "Currency must be at least one character");
 
