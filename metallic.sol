@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 
 pragma solidity >=0.7.0 <0.8.0;
+pragma experimental ABIEncoderV2;
 
 contract UsernameDatabase {
 
@@ -10,16 +11,15 @@ contract UsernameDatabase {
         string currency;
     }
 
+    UserAccount[] listOfAccounts;
     mapping (string => UserAccount) private accounts;
 
-    constructor() public {
+    constructor() {}
 
+    function getAccounts() public view returns (UserAccount[] memory){
+        return listOfAccounts;
     }
 
-    // underscore because this function needs to be internal, and
-    // the derived classes addUsername must be public. If they share the
-    // same name, then it is an override, but overrides cannot have
-    // different visibility.
     function _addAccount(string memory username, string memory public_address, string memory currency) internal virtual {
         require (bytes(username).length != 0, "Username cannot be empty");
         require (bytes(public_address).length != 0, "Public Address cannot be empty");
@@ -28,6 +28,7 @@ contract UsernameDatabase {
         // if the username is unused, add it to the database
         UserAccount memory newUser = UserAccount(username, public_address, currency);
         accounts[username] = newUser;
+        listOfAccounts.push(newUser);
     }
 
     function usernameExists(string memory username) public view returns (bool) {
@@ -43,7 +44,7 @@ contract UsernameDatabase {
 
 contract Metallic is UsernameDatabase{
 
-    function substring(string memory str, uint startIndex, uint endIndex) internal returns (string memory) {
+    function substring(string memory str, uint startIndex, uint endIndex) internal pure returns (string memory) {
         bytes memory strBytes = bytes(str);
         bytes memory result = new bytes(endIndex-startIndex);
         for(uint i = startIndex; i < endIndex; i++) {

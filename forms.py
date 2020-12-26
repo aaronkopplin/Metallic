@@ -3,6 +3,11 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField, Label
 from wtforms.validators import DataRequired, Length, Email, EqualTo
 
 
+class SearchForm(FlaskForm):
+    search = StringField("Username", validators=[DataRequired()])
+    submit = SubmitField("Search")
+
+
 class CreateAccountForm(FlaskForm):
     username = StringField("Username", validators=[DataRequired()])
     public_address = StringField("Your Public Address", validators=[DataRequired()])

@@ -18,6 +18,10 @@ class Metallic:
 
     def username_exists(self, username: str):
         return self.contract.functions.usernameExists(username).call()
+
+    def getAccounts(self):
+        # returns a list of tuples [("username", "address", "currency"), (...), (...), ...]
+        return self.contract.functions.getAccounts().call()
     #
     # def getCurrentUsersUsername(self):
     #     return self.contract.functions.getCurrentUsersUsername().call()

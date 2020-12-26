@@ -11,3 +11,4 @@ w3 = Web3(Web3.HTTPProvider(ganache))
 metallic = Metallic("./metallic.sol", 'metallic.sol', "Metallic", w3)
 
 run_website(metallic)
+

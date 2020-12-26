@@ -26,6 +26,26 @@ def run_website(_metallic: Metallic):
     metallic = _metallic
     app.run(debug=True)
 
+
+@app.route('/search', methods=["GET","POST"])
+def search():
+    form = forms.SearchForm()
+    if form.validate_on_submit():
+        username = form.search.data
+        allUsernames = metallic.getAccounts()  # list of tuples
+        
+        # filter the search results
+        matchingAccounts = []
+        for account in allUsernames:
+            if username in account[0]:
+                matchingAccounts.append(account)
+        print(allUsernames)
+        print(len(matchingAccounts))
+        return render_template('search.html', title="Create Account", form=form, matchingAccounts=matchingAccounts)
+
+    return render_template('search.html', title="Create Account", form=form, matchingAccounts=None)
+
+
 @app.route("/")
 @app.route("/home")
 def home():
