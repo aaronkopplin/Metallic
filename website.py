@@ -8,24 +8,6 @@ from datetime import date
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
 
-posts = [
-                    {
-                        'author': 'Corey Schafer',
-                        'title': 'Blog Post 1',
-                        'content': 'First post content',
-                        'date_posted': 'April 20, 2018'
-                    },
-                    {
-                        'author': 'Jane Doe',
-                        'title': 'Blog Post 2',
-                        'content': 'Second post content',
-                        'date_posted': 'April 21, 2018'
-                    }
-                ]
-
-
-
-
 def run_website(_metallic: Metallic):
     global metallic
     metallic = _metallic
@@ -58,7 +40,7 @@ def search():
 @app.route("/home")
 def home():
     accounts = metallic.getStructuredAccounts()
-    return render_template('home.html', posts=posts, accounts=accounts)
+    return render_template('home.html', accounts=accounts)
 
 
 @app.route("/create-account", methods=['GET', 'POST'])
@@ -71,16 +53,11 @@ def createAccount():
     # handle button presses
     if account_form.validate_on_submit():
 
-        # print("estimated gas required", metallic.estimateGasToAddAccount(account_form.username.data,
-        #                                                                 account_form.public_address.data,
-        #                                                                 account_form.currency.data))
-
         # for testing purposes, pay for the account manually
-        # use the last address from ganache
-        transfer("0xB753e2f771BF4C1C92eE4143e8cbe2F6aE2E4024", 
-                "a751fc02ac56ad329589b24778ef57173dc1a2d58d008693f43dd5e2b97db94f",
-                metallic.getReceiveAddress(),
-                0.02)
+        # use any address from your test blockchain that has a balance of at least a few Eth.
+        public_key = "0xB753e2f771BF4C1C92eE4143e8cbe2F6aE2E4024"
+        private_key = "a751fc02ac56ad329589b24778ef57173dc1a2d58d008693f43dd5e2b97db94f"
+        transfer(public_key, private_key,metallic.getReceiveAddress(), 0.02)
 
         #create account
         metallic.addAccount(account_form.username.data,
