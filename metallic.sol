@@ -9,6 +9,7 @@ contract UsernameDatabase {
         string username;
         string public_address;
         string currency;
+        string creationDate;
     }
 
     UserAccount[] listOfAccounts;
@@ -20,13 +21,16 @@ contract UsernameDatabase {
         return listOfAccounts;
     }
 
-    function _addAccount(string memory username, string memory public_address, string memory currency) internal virtual {
+    function _addAccount(string memory username, 
+                        string memory public_address, 
+                        string memory currency,
+                        string memory creationDate) internal virtual {
         require (bytes(username).length != 0, "Username cannot be empty");
         require (bytes(public_address).length != 0, "Public Address cannot be empty");
         require (!usernameExists(username), "Username already exists.");
 
         // if the username is unused, add it to the database
-        UserAccount memory newUser = UserAccount(username, public_address, currency);
+        UserAccount memory newUser = UserAccount(username, public_address, currency, creationDate);
         accounts[username] = newUser;
         listOfAccounts.push(newUser);
     }
@@ -97,10 +101,13 @@ contract Metallic is UsernameDatabase{
     }
 
     //add a username for an address
-    function addAccount(string memory username, string memory public_address, string memory currency) public {
+    function addAccount(string memory username, 
+                        string memory public_address, 
+                        string memory currency,
+                        string memory creationDate) public {
         require(isValidUsername(username), "Username invalid");
         require(isValidCurrency(currency), "Currency invalid");
 
-        super._addAccount(username, public_address, currency);
+        super._addAccount(username, public_address, currency, creationDate);
     }
 }

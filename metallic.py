@@ -14,27 +14,29 @@ class Metallic:
     def helloWorld(self):
         return self.contract.functions.helloWorld().call()
 
-    def addAccount(self, username: str, public_address: str, currency: str):
-        estimated_gas = self.estimateGasToAddAccount(username, public_address, currency)
+    def addAccount(self, username: str, public_address: str, currency: str, creationDate: str):
+        estimated_gas = self.estimateGasToAddAccount(username, public_address, currency, creationDate)
         nonce = self.w3.eth.getTransactionCount(self.receive_account._address)
-        transaction = self.contract.functions.addAccount(username, public_address, currency).buildTransaction({
-            'chainId' : 1,
-            'gas' : estimated_gas,
-            'gasPrice' : auto.w3.toWei('1', 'gwei'),
-            'nonce' : nonce
-        })
+        transaction = self.contract.functions.addAccount(username, 
+                                                        public_address, 
+                                                        currency, 
+                                                        creationDate
+            ).buildTransaction({
+                'chainId' : 1,
+                'gas' : estimated_gas,
+                'gasPrice' : auto.w3.toWei('47', 'gwei'),
+                'nonce' : nonce
+            })
 
         signed_txn = self.w3.eth.account.sign_transaction(transaction, self.receive_account._private_key)
         self.w3.eth.sendRawTransaction(signed_txn.rawTransaction)
         print("signed transaction hash", Web3.toHex(signed_txn.hash) )
 
+    def estimateGasToAddAccount(self, username: str, public_address: str, currency: str, creationDate: str):
+        return self.contract.functions.addAccount(username, public_address, currency, creationDate).estimateGas()
 
-        # tx_hash = self.contract.functions.addAccount(username, public_address, currency).transact()
-        # tx_receipt = self.w3.eth.waitForTransactionReceipt(tx_hash)
-        # return tx_receipt
-
-    def estimateGasToAddAccount(self, username: str, public_address: str, currency: str):
-        return self.contract.functions.addAccount(username, public_address, currency).estimateGas()
+    def convertGasToEth(self, gas: int):
+        return Web3.fromWei(gas, "ether")
 
     def getAddress(self, username):
         return self.contract.functions.getAddress(username).call()
@@ -45,7 +47,23 @@ class Metallic:
     def getAccounts(self):
         # returns a list of tuples [("username", "address", "currency"), (...), (...), ...]
         return self.contract.functions.getAccounts().call()
-    #
-    # def getCurrentUsersUsername(self):
-    #     return self.contract.functions.getCurrentUsersUsername().call()
+
+    def getStructuredAccounts(self):
+        def byDateCreated(account):
+            return account['dateCreated']
+
+        accounts = []
+        raw_accounts = self.getAccounts()
+        for account in raw_accounts:
+            accounts.append({
+                'username' : account[0],
+                'address' : account[1],
+                'currency' : account[2],
+                'dateCreated' : account[3]
+            })
+            
+        accounts.sort(key=byDateCreated)
+        return accounts
+
+
 

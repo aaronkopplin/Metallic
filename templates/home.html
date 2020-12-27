@@ -1,14 +1,14 @@
 {% extends "layout.html" %}
 {% block content %}
-    {% for post in posts %}
+    {% for account in accounts %}
         <article class="media content-section">
           <div class="media-body">
             <div class="article-metadata">
-              <a class="mr-2" href="#">{{ post.author }}</a>
-              <small class="text-muted">{{ post.date_posted }}</small>
+              <a class="mr-2" href="#">{{ account.username }}</a>
+              <small class="text-muted">{{ account.dateCreated }}</small>
             </div>
-            <h2><a class="article-title" href="#">{{ post.title }}</a></h2>
-            <p class="article-content">{{ post.content }}</p>
+            <h2><a class="article-title" href="#">{{ account.currency }}</a></h2>
+            <p class="article-content">{{ account.address }}</p>
           </div>
         </article>
     {% endfor %}
