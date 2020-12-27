@@ -34,3 +34,13 @@ Currently, all accounts are paid for automatically by one of the addresses from 
 1. Adding accounts to Metallic is very expensive. Somewhere around $5 usd at the current gas and Eth price (arounc 47 gwei and $650 USD at the time of writing). To reduce the cost, the smart contract should stop using "string memory" and start using bytes 32 instead. 
 2. Error checking.
 3. Smart contract gas efficiency is low in general. Any improvemements are welcome.
+
+# Future
+
+Metallic can act as a stand alone resource to make ethereum transactions easier and more accessible to every day users. 
+
+More promisingly, metallic could be integrated to Ethereum wallets to allow Venmo or Paypal like services. Metallic can act as a DNS for eth addresses.
+
+# Motivation
+
+One of the main obstacles to cryptocurrency adoption is how technical and complex it appears. This creates a barrier to entry for foks who do not have a technical background. Metallic aims to make crypto more accessible to these users, and to make everyday use of cryptocurrency easier. 

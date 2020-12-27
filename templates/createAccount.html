@@ -21,7 +21,8 @@
                 <legend class="border-bottom mb-4">Pay For Account</legend>
                 <p class='text-muted'>Please pay {{ estimated_gas }} ETH to the following address. This covers transaction costs.</p>
                 <div class="form-group">
-                    {{ account_form.payment_address(class="form-control-label")}}
+                    <p>In production, an ethereum address would be displayed here. This address will use the funds to cover the gas cost of the transaction.<p>
+                    <!-- {{ account_form.payment_address(class="form-control-label")}} -->
                  </div>
             </fieldset>
             <div class="form-group">
