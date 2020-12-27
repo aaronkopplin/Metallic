@@ -6,11 +6,11 @@ Metallic makes making ethereum payments easy by allowing payments to be made bet
 
 # Dependencies
 
-pip3 install Flask
-pip3 install py-solc-x
-pip3 install -U web3[tester]
-pip3 install flask-wtf
-pip3 install email_validator
+1. pip3 install Flask
+2. pip3 install py-solc-x
+3. pip3 install -U web3[tester]
+4. pip3 install flask-wtf
+5. pip3 install email_validator
 
 # Development  
 
@@ -32,7 +32,5 @@ Currently, all accounts are paid for automatically by one of the addresses from 
 # Open Issues
 
 1. Adding accounts to Metallic is very expensive. Somewhere around $5 usd at the current gas and Eth price (arounc 47 gwei and $650 USD at the time of writing). To reduce the cost, the smart contract should stop using "string memory" and start using bytes 32 instead. 
-
 2. Error checking.
-
 3. Smart contract gas efficiency is low in general. Any improvemements are welcome.
