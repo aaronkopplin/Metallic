@@ -11,6 +11,8 @@ Metallic makes making ethereum payments easy by allowing payments to be made bet
 3. pip3 install -U web3[tester]
 4. pip3 install flask-wtf
 5. pip3 install email_validator
+6. pip3 install pyside6
+7. sudo apt install libopengl0 -y
 
 # Development  
 
