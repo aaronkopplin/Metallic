@@ -17,7 +17,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(821, 518)
+        MainWindow.resize(821, 516)
         icon = QIcon()
         icon.addFile(u"logo.png", QSize(), QIcon.Normal, QIcon.Off)
         MainWindow.setWindowIcon(icon)
@@ -53,7 +53,7 @@ class Ui_MainWindow(object):
         self.feed_scroll_area.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 98, 28))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 591, 384))
         self.verticalLayout = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
@@ -86,10 +86,10 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_2.addWidget(self.search_username)
 
-        self.s = QPushButton(self.tab_2)
-        self.s.setObjectName(u"s")
+        self.search_button = QPushButton(self.tab_2)
+        self.search_button.setObjectName(u"search_button")
 
-        self.horizontalLayout_2.addWidget(self.s)
+        self.horizontalLayout_2.addWidget(self.search_button)
 
 
         self.verticalLayout_11.addLayout(self.horizontalLayout_2)
@@ -103,12 +103,25 @@ class Ui_MainWindow(object):
         self.groupBox_3.setSizePolicy(sizePolicy2)
         self.verticalLayout_3 = QVBoxLayout(self.groupBox_3)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
         self.results_scroll_area = QScrollArea(self.groupBox_3)
         self.results_scroll_area.setObjectName(u"results_scroll_area")
+        self.results_scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.results_scroll_area.setWidgetResizable(True)
         self.scrollAreaWidgetContents_3 = QWidget()
         self.scrollAreaWidgetContents_3.setObjectName(u"scrollAreaWidgetContents_3")
-        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 98, 28))
+        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 571, 329))
+        self.verticalLayout_12 = QVBoxLayout(self.scrollAreaWidgetContents_3)
+        self.verticalLayout_12.setObjectName(u"verticalLayout_12")
+        self.results_vertical_layout = QVBoxLayout()
+        self.results_vertical_layout.setObjectName(u"results_vertical_layout")
+        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.results_vertical_layout.addItem(self.verticalSpacer_2)
+
+
+        self.verticalLayout_12.addLayout(self.results_vertical_layout)
+
         self.results_scroll_area.setWidget(self.scrollAreaWidgetContents_3)
 
         self.verticalLayout_3.addWidget(self.results_scroll_area)
@@ -306,32 +319,32 @@ class Ui_MainWindow(object):
         self.verticalLayout_9.addItem(self.verticalSpacer_3)
 
         self.login_tab_widget.addTab(self.login_tab, "")
-        self.tab_4 = QWidget()
-        self.tab_4.setObjectName(u"tab_4")
-        self.verticalLayout_10 = QVBoxLayout(self.tab_4)
+        self.create_account_tab = QWidget()
+        self.create_account_tab.setObjectName(u"create_account_tab")
+        self.verticalLayout_10 = QVBoxLayout(self.create_account_tab)
         self.verticalLayout_10.setObjectName(u"verticalLayout_10")
-        self.label_3 = QLabel(self.tab_4)
+        self.label_3 = QLabel(self.create_account_tab)
         self.label_3.setObjectName(u"label_3")
         sizePolicy7.setHeightForWidth(self.label_3.sizePolicy().hasHeightForWidth())
         self.label_3.setSizePolicy(sizePolicy7)
 
         self.verticalLayout_10.addWidget(self.label_3)
 
-        self.create_account_username = QLineEdit(self.tab_4)
+        self.create_account_username = QLineEdit(self.create_account_tab)
         self.create_account_username.setObjectName(u"create_account_username")
         sizePolicy9.setHeightForWidth(self.create_account_username.sizePolicy().hasHeightForWidth())
         self.create_account_username.setSizePolicy(sizePolicy9)
 
         self.verticalLayout_10.addWidget(self.create_account_username)
 
-        self.label_4 = QLabel(self.tab_4)
+        self.label_4 = QLabel(self.create_account_tab)
         self.label_4.setObjectName(u"label_4")
         sizePolicy7.setHeightForWidth(self.label_4.sizePolicy().hasHeightForWidth())
         self.label_4.setSizePolicy(sizePolicy7)
 
         self.verticalLayout_10.addWidget(self.label_4)
 
-        self.create_account_password = QLineEdit(self.tab_4)
+        self.create_account_password = QLineEdit(self.create_account_tab)
         self.create_account_password.setObjectName(u"create_account_password")
         sizePolicy9.setHeightForWidth(self.create_account_password.sizePolicy().hasHeightForWidth())
         self.create_account_password.setSizePolicy(sizePolicy9)
@@ -339,14 +352,14 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_10.addWidget(self.create_account_password)
 
-        self.label_7 = QLabel(self.tab_4)
+        self.label_7 = QLabel(self.create_account_tab)
         self.label_7.setObjectName(u"label_7")
         sizePolicy7.setHeightForWidth(self.label_7.sizePolicy().hasHeightForWidth())
         self.label_7.setSizePolicy(sizePolicy7)
 
         self.verticalLayout_10.addWidget(self.label_7)
 
-        self.create_account_confirm_password = QLineEdit(self.tab_4)
+        self.create_account_confirm_password = QLineEdit(self.create_account_tab)
         self.create_account_confirm_password.setObjectName(u"create_account_confirm_password")
         sizePolicy9.setHeightForWidth(self.create_account_confirm_password.sizePolicy().hasHeightForWidth())
         self.create_account_confirm_password.setSizePolicy(sizePolicy9)
@@ -354,14 +367,14 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_10.addWidget(self.create_account_confirm_password)
 
-        self.create_button = QPushButton(self.tab_4)
+        self.create_button = QPushButton(self.create_account_tab)
         self.create_button.setObjectName(u"create_button")
         sizePolicy5.setHeightForWidth(self.create_button.sizePolicy().hasHeightForWidth())
         self.create_button.setSizePolicy(sizePolicy5)
 
         self.verticalLayout_10.addWidget(self.create_button)
 
-        self.create_account_error_message = QLabel(self.tab_4)
+        self.create_account_error_message = QLabel(self.create_account_tab)
         self.create_account_error_message.setObjectName(u"create_account_error_message")
         self.create_account_error_message.setStyleSheet(u"color: red;")
 
@@ -371,7 +384,7 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_10.addItem(self.verticalSpacer_5)
 
-        self.login_tab_widget.addTab(self.tab_4, "")
+        self.login_tab_widget.addTab(self.create_account_tab, "")
 
         self.verticalLayout_4.addWidget(self.login_tab_widget)
 
@@ -409,8 +422,8 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.feed_tab_widget.setCurrentIndex(2)
-        self.login_tab_widget.setCurrentIndex(0)
+        self.feed_tab_widget.setCurrentIndex(1)
+        self.login_tab_widget.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -425,7 +438,7 @@ class Ui_MainWindow(object):
         self.actionImport_Wallet.setText(QCoreApplication.translate("MainWindow", u"Import Wallet", None))
         self.feed_tab_widget.setTabText(self.feed_tab_widget.indexOf(self.tab), QCoreApplication.translate("MainWindow", u"Feed", None))
         self.label_6.setText(QCoreApplication.translate("MainWindow", u"Username", None))
-        self.s.setText(QCoreApplication.translate("MainWindow", u"Go", None))
+        self.search_button.setText(QCoreApplication.translate("MainWindow", u"Go", None))
         self.groupBox_3.setTitle(QCoreApplication.translate("MainWindow", u"Results", None))
         self.feed_tab_widget.setTabText(self.feed_tab_widget.indexOf(self.tab_2), QCoreApplication.translate("MainWindow", u"Search", None))
         self.label_9.setText(QCoreApplication.translate("MainWindow", u"Username", None))
@@ -451,7 +464,7 @@ class Ui_MainWindow(object):
         self.label_7.setText(QCoreApplication.translate("MainWindow", u"Confirm Password", None))
         self.create_button.setText(QCoreApplication.translate("MainWindow", u"Create", None))
         self.create_account_error_message.setText("")
-        self.login_tab_widget.setTabText(self.login_tab_widget.indexOf(self.tab_4), QCoreApplication.translate("MainWindow", u"Create Account", None))
+        self.login_tab_widget.setTabText(self.login_tab_widget.indexOf(self.create_account_tab), QCoreApplication.translate("MainWindow", u"Create Account", None))
         self.status.setText(QCoreApplication.translate("MainWindow", u"Logged out", None))
         self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))
         self.menuSettings.setTitle(QCoreApplication.translate("MainWindow", u"Settings", None))

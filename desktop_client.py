@@ -53,10 +53,39 @@ class MetallicDesktopClient(QtWidgets.QMainWindow):
         self.ui.activate_account_button.clicked.connect(self.activate_account)
         self.ui.private_key_button.clicked.connect(self.toggle_private_key)
         self.ui.login_button.clicked.connect(self.login)
+        self.ui.search_button.clicked.connect(self.search)
 
         # last minute configuration
-        self.ui.login_tab_widget.setCurrentIndex(self.ui.login_tab_widget.indexOf(self.ui.login_tab))
+        self.ui.login_tab_widget.setCurrentIndex(self.ui.login_tab_widget.indexOf(self.ui.create_account_tab))
 
+    def search(self):
+        username = self.ui.search_username.text()
+        allUsernames = self.metallic.getAccounts()  # list of tuples
+        
+        print(allUsernames)
+        # filter the search results
+        matchingAccounts = []
+        for account in allUsernames:
+            if username in account[0]:
+                matchingAccounts.append(account)
+
+        # clear the results
+        i = 0
+        while self.ui.results_vertical_layout.count() > 0:
+            try:
+                self.ui.results_vertical_layout.removeWidget(self.ui.results_vertical_layout.itemAt(i))
+            except TypeError:
+                self.ui.results_vertical_layout.removeItem(self.ui.results_vertical_layout.itemAt(i))
+               
+            i += 1
+                
+        # display the results
+        for account in matchingAccounts:
+            self.ui.results_vertical_layout.addWidget(QtWidgets.QLabel(account[0]))
+
+        # add a vertical spacer at the end to move the results to the top
+        self.ui.results_vertical_layout.addItem(QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding))
+    
     def setLoginEnabled(self, enabled: bool):
         self.ui.login_username.setEnabled(enabled)
         self.ui.login_password.setEnabled(enabled)
