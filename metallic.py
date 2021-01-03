@@ -14,6 +14,24 @@ class Metallic:
     def helloWorld(self):
         return self.contract.functions.helloWorld().call()
 
+    # create and sign the transaction with the created account information
+    def addAccountPayWithSameAccount(self, username: str, public_address: str, currency: str, creationDate: str, private_key: str):
+        estimated_gas = self.estimateGasToAddAccount(username, public_address, currency, creationDate)
+        nonce = self.w3.eth.getTransactionCount(public_address)
+        transaction = self.contract.functions.addAccount(username, 
+                                                        public_address, 
+                                                        currency, 
+                                                        creationDate
+            ).buildTransaction({
+                'chainId' : 1,
+                'gas' : estimated_gas,
+                'gasPrice' : auto.w3.toWei('47', 'gwei'),
+                'nonce' : nonce
+            })
+
+        signed_txn = self.w3.eth.account.sign_transaction(transaction, private_key)
+        self.w3.eth.sendRawTransaction(signed_txn.rawTransaction)
+
     def addAccount(self, username: str, public_address: str, currency: str, creationDate: str):
         estimated_gas = self.estimateGasToAddAccount(username, public_address, currency, creationDate)
         nonce = self.w3.eth.getTransactionCount(self.receive_account._address)
@@ -30,7 +48,6 @@ class Metallic:
 
         signed_txn = self.w3.eth.account.sign_transaction(transaction, self.receive_account._private_key)
         self.w3.eth.sendRawTransaction(signed_txn.rawTransaction)
-        print("signed transaction hash", Web3.toHex(signed_txn.hash) )
 
     def estimateGasToAddAccount(self, username: str, public_address: str, currency: str, creationDate: str):
         return self.contract.functions.addAccount(username, public_address, currency, creationDate).estimateGas()

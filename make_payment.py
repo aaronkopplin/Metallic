@@ -22,7 +22,7 @@ def transfer(from_public: str, from_private: str, to_public: str, amount: int):
 
         signed_tx = w3.eth.account.signTransaction(tx, from_private)
         tx_hash = w3.eth.sendRawTransaction(signed_tx.rawTransaction)
-        print(Web3.toHex(tx_hash))
+        # print(Web3.toHex(tx_hash))
     else:
         raise Exception("Not Connected to ganache")
 

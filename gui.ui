@@ -7,18 +7,22 @@
     <x>0</x>
     <y>0</y>
     <width>821</width>
-    <height>539</height>
+    <height>518</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Metallic</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>logo.png</normaloff>logo.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_7">
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QTabWidget" name="tabWidget">
+       <widget class="QTabWidget" name="feed_tab_widget">
         <property name="sizePolicy">
          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
@@ -26,7 +30,7 @@
          </sizepolicy>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>2</number>
         </property>
         <widget class="QWidget" name="tab">
          <attribute name="title">
@@ -43,8 +47,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>591</width>
-               <height>407</height>
+               <width>98</width>
+               <height>28</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout">
@@ -121,8 +125,8 @@
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>567</width>
-                  <height>334</height>
+                  <width>98</width>
+                  <height>28</height>
                  </rect>
                 </property>
                </widget>
@@ -133,7 +137,7 @@
           </item>
          </layout>
         </widget>
-        <widget class="QWidget" name="tab_5">
+        <widget class="QWidget" name="tab_account">
          <attribute name="title">
           <string>Account</string>
          </attribute>
@@ -175,34 +179,112 @@
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_5">
              <item>
-              <layout class="QGridLayout" name="gridLayout">
-               <item row="0" column="1">
-                <widget class="QLabel" name="label_11">
-                 <property name="text">
-                  <string>Balance</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="0">
+              <layout class="QVBoxLayout" name="verticalLayout_13">
+               <item>
                 <widget class="QLabel" name="label_10">
                  <property name="text">
                   <string>Address</string>
                  </property>
                 </widget>
                </item>
-               <item row="1" column="0">
+               <item>
                 <widget class="QLabel" name="address_label">
                  <property name="text">
-                  <string>TextLabel</string>
+                  <string>0x0</string>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
-               <item row="1" column="1">
-                <widget class="QLabel" name="balance_label">
+               <item>
+                <widget class="QLabel" name="label_11">
                  <property name="text">
-                  <string>TextLabel</string>
+                  <string>Balance (ether)</string>
                  </property>
                 </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="balance_label">
+                 <property name="text">
+                  <string>0.00</string>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="private_key_button">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>Show Private Key</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="private_key_label">
+                 <property name="text">
+                  <string>0x0</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="activation_group_box">
+            <property name="title">
+             <string>Activation</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_6">
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_4">
+               <item>
+                <widget class="QLabel" name="activation_label">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>This account is unactivated. Use account balance to activate account</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="activate_account_button">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>Activate</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
                </item>
               </layout>
              </item>
@@ -229,7 +311,7 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
-         <widget class="QTabWidget" name="tabWidget_2">
+         <widget class="QTabWidget" name="login_tab_widget">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -239,7 +321,7 @@
           <property name="currentIndex">
            <number>0</number>
           </property>
-          <widget class="QWidget" name="tab_3">
+          <widget class="QWidget" name="login_tab">
            <attribute name="title">
             <string>Login</string>
            </attribute>
@@ -288,7 +370,20 @@
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="echoMode">
+               <enum>QLineEdit::Password</enum>
+              </property>
              </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_5">
+              <property name="text">
+               <string>Wallet</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="wallet_line_Edit"/>
             </item>
             <item>
              <widget class="QPushButton" name="login_button">
@@ -367,6 +462,9 @@
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="echoMode">
+               <enum>QLineEdit::Password</enum>
+              </property>
              </widget>
             </item>
             <item>
@@ -390,6 +488,9 @@
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="echoMode">
+               <enum>QLineEdit::Password</enum>
+              </property>
              </widget>
             </item>
             <item>
@@ -402,6 +503,16 @@
               </property>
               <property name="text">
                <string>Create</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="create_account_error_message">
+              <property name="styleSheet">
+               <string notr="true">color: red;</string>
+              </property>
+              <property name="text">
+               <string/>
               </property>
              </widget>
             </item>
@@ -449,6 +560,9 @@
      <string>File</string>
     </property>
     <addaction name="actionQuit"/>
+    <addaction name="actionLogout"/>
+    <addaction name="actionExport_Wallet"/>
+    <addaction name="actionImport_Wallet"/>
    </widget>
    <widget class="QMenu" name="menuSettings">
     <property name="title">
@@ -468,6 +582,21 @@
   <action name="actionWindow_Settings">
    <property name="text">
     <string>Window Settings</string>
+   </property>
+  </action>
+  <action name="actionLogout">
+   <property name="text">
+    <string>Logout</string>
+   </property>
+  </action>
+  <action name="actionExport_Wallet">
+   <property name="text">
+    <string>Export Wallet</string>
+   </property>
+  </action>
+  <action name="actionImport_Wallet">
+   <property name="text">
+    <string>Import Wallet</string>
    </property>
   </action>
  </widget>
