@@ -7,7 +7,7 @@ def create_ganache_w3():
     return Web3(Web3.HTTPProvider(ganache))
 
 
-def transfer(from_public: str, from_private: str, to_public: str, amount: int):
+def transfer(from_public: str, from_private: str, to_public: str, amount: float):
     w3 = create_ganache_w3()
     
     if w3.isConnected():
@@ -16,7 +16,7 @@ def transfer(from_public: str, from_private: str, to_public: str, amount: int):
             'nonce': nonce,
             'to': to_public,
             'value': Web3.toWei(amount, 'ether'),
-            'gas': 2000000,
+            'gas': 21000,
             'gasPrice': Web3.toWei('50', 'gwei'),
         }
 

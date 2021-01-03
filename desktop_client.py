@@ -47,6 +47,7 @@ class MetallicDesktopClient(QtWidgets.QMainWindow):
     def configure(self):
         self.w3 = web3.Web3(web3.Web3.HTTPProvider("HTTP://127.0.0.1:7545"))
         self.metallic = Metallic("./metallic.sol", 'metallic.sol', "Metallic", self.w3)
+        self.feed_is_empty = True
 
         # button listeners
         self.ui.create_button.clicked.connect(self.create_account)
@@ -54,15 +55,59 @@ class MetallicDesktopClient(QtWidgets.QMainWindow):
         self.ui.private_key_button.clicked.connect(self.toggle_private_key)
         self.ui.login_button.clicked.connect(self.login)
         self.ui.search_button.clicked.connect(self.search)
+        self.ui.profiile_pay_button.clicked.connect(self.pay)
 
-        # last minute configuration
+        # set the create account tab as the current tab
         self.ui.login_tab_widget.setCurrentIndex(self.ui.login_tab_widget.indexOf(self.ui.create_account_tab))
+
+        # hide tabs
+        self.set_tab_visibility(feed=False, search=True, account=False, profile=False, focus_tab=self.ui.search_tab)
+
+    def insert_item_in_feed(self, text: str):
+        if self.feed_is_empty:
+            self.ui.feed_greeting_notification.setText(text)
+            self.feed_is_empty = False
+            return
+
+        index = self.ui.feed_vertical_layout.count() - 1
+        self.ui.feed_vertical_layout.insertWidget(index, QtWidgets.QLabel(text))
+
+    def pay(self):
+        if self.current_viewed_profile:
+            make_payment.transfer(self.account.public_key, 
+                    self.account.private_key, 
+                    self.current_viewed_profile[1], 
+                    float(self.ui.payments_amount.text()))
+
+        self.display_account_information()
+
+        # add an entry on the feed
+        self.insert_item_in_feed("You paid @" + self.current_viewed_profile[0] + " " + self.ui.payments_amount.text().rstrip("0") + " Ethereum")
+
+    def set_tab_visibility(self, feed: bool, search: bool, account: bool, profile: bool, focus_tab):
+        self.ui.login_tab_widget.setCurrentIndex(self.ui.login_tab_widget.indexOf(focus_tab))
+
+        self.ui.feed_tab_widget.setTabVisible(self.ui.feed_tab_widget.indexOf(self.ui.profile_tab), profile)
+        self.ui.feed_tab_widget.setTabVisible(self.ui.feed_tab_widget.indexOf(self.ui.feed_tab), feed)
+        self.ui.feed_tab_widget.setTabVisible(self.ui.feed_tab_widget.indexOf(self.ui.tab_account), account)
+        self.ui.feed_tab_widget.setTabVisible(self.ui.feed_tab_widget.indexOf(self.ui.search_tab), search)
+
+    def open_profile(self, account):
+        # make the profile tab visible
+        self.ui.feed_tab_widget.setTabVisible(self.ui.feed_tab_widget.indexOf(self.ui.profile_tab), True)
+        self.ui.feed_tab_widget.setCurrentIndex(self.ui.feed_tab_widget.indexOf(self.ui.profile_tab))
+
+        self.ui.profile_username.setText("Username: @" + account[0])
+        self.ui.profile_address.setText("Public address: " + account[1])
+        self.ui.profile_currency.setText("Currency: " + account[2])
+        self.ui.profile_date_created.setText("Date Created: " + account[3])
+
+        self.current_viewed_profile = account
 
     def search(self):
         username = self.ui.search_username.text()
         allUsernames = self.metallic.getAccounts()  # list of tuples
-        
-        print(allUsernames)
+
         # filter the search results
         matchingAccounts = []
         for account in allUsernames:
@@ -70,18 +115,17 @@ class MetallicDesktopClient(QtWidgets.QMainWindow):
                 matchingAccounts.append(account)
 
         # clear the results
-        i = 0
         while self.ui.results_vertical_layout.count() > 0:
             try:
-                self.ui.results_vertical_layout.removeWidget(self.ui.results_vertical_layout.itemAt(i))
+                self.ui.results_vertical_layout.removeWidget(self.ui.results_vertical_layout.itemAt(0))
             except TypeError:
-                self.ui.results_vertical_layout.removeItem(self.ui.results_vertical_layout.itemAt(i))
-               
-            i += 1
+                self.ui.results_vertical_layout.removeItem(self.ui.results_vertical_layout.itemAt(0))
                 
         # display the results
         for account in matchingAccounts:
-            self.ui.results_vertical_layout.addWidget(QtWidgets.QLabel(account[0]))
+            result = QtWidgets.QPushButton("@" + account[0] + "   " + account[2] + "   " + account[3])
+            result.clicked.connect(lambda: self.open_profile(account))
+            self.ui.results_vertical_layout.addWidget(result)
 
         # add a vertical spacer at the end to move the results to the top
         self.ui.results_vertical_layout.addItem(QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding))
@@ -94,11 +138,17 @@ class MetallicDesktopClient(QtWidgets.QMainWindow):
 
     def logout(self):
         self.setLoginEnabled(True)
+        self.set_tab_visibility(feed=False, search=True, account=False, profile=False, focus_tab=self.ui.search_tab)
 
     def display_account_information(self):
         self.ui.account_username_label.setText("@" + self.account.username)
         self.ui.address_label.setText(self.account.public_key)
-        self.ui.balance_label.setText(str(self.w3.fromWei(self.w3.eth.getBalance(self.account.public_key), "ether")))
+        
+        balance = str(self.w3.fromWei(self.w3.eth.getBalance(self.account.public_key), "ether"))
+        
+        self.ui.balance_label.setText(balance + " Ethereum")
+        self.ui.status.setText("@" + self.account.username)
+        self.ui.status_balance_label.setText("Balance: " + balance + " Ethereum")
 
     def login(self):
         self.account = Account(self.ui.login_username.text(), self.ui.login_password.text(), self.w3)
@@ -108,6 +158,7 @@ class MetallicDesktopClient(QtWidgets.QMainWindow):
 
         self.display_account_information()
         self.setLoginEnabled(False)
+        self.set_tab_visibility(feed=True, search=True, account=True, profile=False, focus_tab=self.ui.tab_account)
 
     def toggle_private_key(self):
         if self.ui.private_key_label.text() == "0x0":
@@ -125,11 +176,10 @@ class MetallicDesktopClient(QtWidgets.QMainWindow):
                                 self.account.private_key)
 
         if  self.metallic.username_exists(self.account.username):
-            print("Username Successfully added!")
-            self.ui.balance_label.setText(str(self.w3.fromWei(self.w3.eth.getBalance(self.account.public_key), "ether")))
+            self.display_account_information()
             self.ui.activation_group_box.hide()
         else:
-            print("Failed to add username!")
+            raise Exception()
 
     def create_account(self):
         try:
@@ -172,11 +222,9 @@ class MetallicDesktopClient(QtWidgets.QMainWindow):
             self.ui.create_account_username.setText("")
             self.ui.create_account_password.setText("")
             self.ui.create_account_confirm_password.setText("")
-            self.ui.status.setText("Logged in")
+            
         finally:
             self.setCursor(PySide6.QtCore.Qt.ArrowCursor)
-
-        
 
 
 app = QtWidgets.QApplication(sys.argv)
