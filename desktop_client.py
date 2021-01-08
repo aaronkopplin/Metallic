@@ -7,6 +7,7 @@ import make_payment
 from metallic import Metallic
 from datetime import date
 import json
+import smart_contract
 
 
 class Account:
@@ -46,7 +47,13 @@ class MetallicDesktopClient(QtWidgets.QMainWindow):
 
     def configure(self):
         self.w3 = web3.Web3(web3.Web3.HTTPProvider("HTTP://127.0.0.1:7545"))
-        self.metallic = Metallic("./metallic.sol", 'metallic.sol', "Metallic", self.w3)
+        if len(sys.argv) == 2 and sys.argv[1] == "-d":
+            # compile and deploy the contract. set the variables needed to connect to contract in smart_contract.py
+            self.metallic = Metallic("./metallic.sol", 'metallic.sol', "Metallic", self.w3)
+        else:
+            # connect to the already deployed contract. ony need to deploy when making a change to the contract
+            self.metallic = Metallic(w3=self.w3)
+
         self.feed_is_empty = True
 
         # button listeners
@@ -107,13 +114,13 @@ class MetallicDesktopClient(QtWidgets.QMainWindow):
     def search(self):
         username = self.ui.search_username.text()
         allUsernames = self.metallic.getAccounts()  # list of tuples
-
+        
         # filter the search results
         matchingAccounts = []
         for account in allUsernames:
             if username in account[0]:
                 matchingAccounts.append(account)
-
+        
         # clear the results
         while self.ui.results_vertical_layout.count() > 0:
             try:
@@ -152,7 +159,7 @@ class MetallicDesktopClient(QtWidgets.QMainWindow):
 
     def login(self):
         self.account = Account(self.ui.login_username.text(), self.ui.login_password.text(), self.w3)
-        with open('wallet.json', 'r') as json_file:
+        with open(self.wallet_file_name, 'r') as json_file:
             wallet = json.load(json_file)
             self.account.decrypt(wallet)
 
@@ -203,7 +210,8 @@ class MetallicDesktopClient(QtWidgets.QMainWindow):
 
             # save the encrypted wallet in the current directory
             wallet = self.account.encrypt()
-            with open('wallet.json', 'w') as json_file:
+            self.wallet_file_name = self.account.username + '_wallet.json'
+            with open(self.wallet_file_name, 'w') as json_file:
                 json.dump(wallet, json_file)
 
             # focus on the login tab

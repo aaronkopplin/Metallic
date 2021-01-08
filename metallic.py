@@ -1,12 +1,24 @@
 from contract_creator import compile_and_deploy_contract
 import web3.auto as auto
 from web3 import Web3
+import os
+import smart_contract
 
 class Metallic:
-    def __init__(self, filePath: str, fileName: str, contractName: str, w3):
-        self.contract = compile_and_deploy_contract(filePath, fileName, contractName, w3)
+    def __init__(self, filePath=None, fileName=None, contractName=None, w3=None):
         self.w3 = w3
         self.receive_account = self.w3.eth.account.create("test seed")
+
+        if filePath != None and fileName != None and contractName != None: 
+            self.contract, self.abi = compile_and_deploy_contract(filePath, fileName, contractName, w3)
+            sc = "smart_contract.py"
+            if os.path.exists(sc): 
+                os.remove(sc) 
+            with open(sc, "w") as file:
+                file.write("address = \"" + self.contract.address + "\"\nabi = " + self.abi.__str__())
+        else:
+            self.contract = w3.eth.contract(address=smart_contract.address, abi=smart_contract.abi)
+       
 
     def getReceiveAddress(self):
         return str(self.receive_account._address)
